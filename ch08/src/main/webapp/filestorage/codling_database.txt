@@ -1,0 +1,57 @@
+codling
+
+- IDENTITY
+  - position
+    - no(pk), name
+
+  - 개인(individual)
+    - id(pk), password, name, birth, gender, phone, Email, address
+
+  - 기업(corporate)
+    - id(pk), password, business_number, company_name, representative_name
+
+  - 관리자(administrator)
+    - id(pk), password, name
+
+======================================================
+
+- JOB
+  - 구인 공고(job_posting)
+    - no(pk), corporate_id(fk), individual_id(fk)
+
+======================================================
+
+- RESUME
+  - 이력서(resume)
+    - no(pk), individual_id(fk), education_no(fk), career, lisence
+
+  - 학력(education)
+    - no(pk), name, elementary_school_no(fk), middle_school_no(fk), high_school_no(fk), university_school_no(fk)
+
+  - 초등학교(elementary_school)
+    - no(pk), resume_no(fk), name, entry_date, graduation_date, ged, education_no(fk)
+
+  - 중학교(middle_school)
+    - no(pk), resume_no(fk), name, entry_date, graduation_date, ged, education_no(fk)
+
+  - 고등학교(high_school)
+    - no(pk), resume_no(fk), name, entry_date, graduation_date, major, ged, education_no(fk)
+
+  - 대학교(university)
+    - no(pk), resume_no(fk), year, name, entry_date, graduation_date, major, minor, grade, education_no(fk)
+
+
+개인회원의 학력사항 속성 값 찾을 시
+SELECT 학력no FROM 회원 LEFT JOIN 이력서 ON 회원id = 이력서.회원id
+
+
+
+  - 자기소개서(cover_letter)
+    - no(pk), individual_id(fk), contents
+
+  - 자격증(license)
+    - no(pk), individual_id(fk), name, issuer, acquisition_date
+
+======================================================
+
+- COMMUNITY

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<style>
+	table, tr, td {border: 2px solid black; border-collapse: collapse;}
+	table tr:nth-last-child(1) td {text-align: center;}
+</style>
+<script type="text/javascript" src="QuizFn.js" charset="UTF-8"></script>
+<body>
+	<form action="Quiz.jsp" method="post" name="quiz">
+		<table>
+			<tr>
+				<th colspan="3">Information</th>
+			</tr>
+			<tr>
+				<td>이름</td>
+				<td><input name="name"></td>
+				<td>이름을 입력해 주세요.</td>
+			</tr>
+			<tr>
+				<td>주소</td>
+				<td><input name="address"></td>
+				<td>주소를 입력해 주세요.</td>
+			</tr>
+			<tr>
+				<td>전화번호</td>
+				<td><input type="tel" name="tel"></td>
+				<td>전화번호를 입력해 주세요.</td>
+			</tr>
+			<tr>
+				<td>이메일</td>
+				<td><input type="email" name="email"></td>
+				<td>이메일을 입력해 주세요.</td>
+			</tr>
+			<tr>
+				<td>취미</td>
+				<td><input name="hobby"></td>
+				<td>취미를 입력해 주세요.</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<input type="button" value="전송" onclick="Event()">
+					<input type="reset" value="초기화">
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

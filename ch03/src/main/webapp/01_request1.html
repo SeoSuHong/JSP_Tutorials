@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="01_request2.jsp" method="post">
+	이름 : <input name="name"><p/>
+	학번 : <input name="id"><p/>
+	성별 : 남 <input type="radio" name="sex" value="남자" checked> &ensp; 여 <input type="radio" name="sex" value="여자"><p/>
+	전공 : <select name="department">
+			<option value="컴퓨터공학과">컴퓨터공학과</option>
+			<option value="임상병리학과">임상병리학과</option>
+			<option value="호텔경영학과">호텔경영학과</option>
+			<option value="건축학과">건축학과</option>
+			<option value="전자공학과">전자공학과</option>
+		</select><p/>
+	<input type="submit" value="보내기">
+</form>
+</body>
+</html>
