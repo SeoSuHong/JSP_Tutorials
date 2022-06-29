@@ -1,12 +1,18 @@
 package board;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -114,7 +120,7 @@ public class BoardMgr {
 			if(keyWord.equals("null") || keyWord.equals("")) {
 				sql = "SELECT * FROM (SELECT * FROM board ORDER BY ref DESC, pos) WHERE ROWNUM >= ? AND ROWNUM <= ?";
 
-				pstmt.getConnection().prepareStatement(sql);
+				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, start);
 				pstmt.setInt(2, end);
 			} else {
@@ -134,7 +140,7 @@ public class BoardMgr {
 				bean.setPos(rs.getInt("pos"));
 				bean.setRef(rs.getInt("ref"));
 				bean.setDepth(rs.getInt("depth"));
-				bean.setRegdate(rs.getString("regdata"));
+				bean.setRegdate(rs.getString("regdate"));
 				bean.setCount(rs.getInt("count"));
 				
 				vlist.add(bean);
@@ -145,6 +151,116 @@ public class BoardMgr {
 			pool.freeConnection(conn, pstmt, rs);
 		}
 		return vlist;
+	}
+	
+	// 조회수 증가
+	public void upCount(int num) {
+		String sql = null;
+		
+		try {
+			conn = pool.getConnection();
+			sql = "UPDATE board SET count = count + 1 WHERE num = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("upCount Error : " + e.getMessage());
+		} finally {
+			pool.freeConnection(conn, pstmt);
+		}
+	}
+	
+	// 게시물 얻어오기
+	public BoardBean getBoard(int num) {
+		String sql = null;
+		BoardBean bean = new BoardBean();
+		try {
+			conn = pool.getConnection();
+			sql = "SELECT * FROM board WHERE num = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				bean.setNum(rs.getInt("num"));
+				bean.setName(rs.getString("name"));
+				bean.setSubject(rs.getString("Subject"));
+				bean.setContent(rs.getString("content"));
+				bean.setPos(rs.getInt("pos"));
+				bean.setRef(rs.getInt("ref"));
+				bean.setDepth(rs.getInt("depth"));
+				bean.setRegdate(rs.getString("regdate"));
+				bean.setPass(rs.getString("pass"));
+				bean.setIp(rs.getString("ip"));
+				bean.setCount(rs.getInt("count"));
+				bean.setFilename(rs.getString("filename"));
+				bean.setFilesize(rs.getInt("num"));
+			}
+			
+		} catch(Exception e) {
+			System.out.println("getBoard Error : " + e.getMessage());
+		} finally {
+			pool.freeConnection(conn, pstmt);
+		}
+		return bean;
+	}
+	
+	// 파일 다운로드
+	public void download(HttpServletRequest req, HttpServletResponse res, JspWriter out, PageContext pageContext) {
+		try {
+			String filename = req.getParameter("filename");			
+			File file = new File(UtilMgr.con(SAVEFOLDER + File.separator + filename));
+			byte b[] = new byte[(int)file.length()];
+			res.setHeader("Accept-Range", "bytes");
+			String strClient = req.getHeader("User-Agent");
+			if(strClient.indexOf("MSIE6.0") != -1) {
+				res.setContentType("application/smnet; charset=UTF-8");
+				res.setHeader("Content-Disposition", "filename=" + filename + ";");
+			} else {
+				res.setContentType("application/smnet; charset=UTF-8");
+				res.setHeader("Content-Disposition", "attachment; filename=" + filename + ";");
+			}
+			out.clear();
+			out = pageContext.pushBody();
+			if(file.isFile()) {
+				BufferedInputStream fin = new BufferedInputStream(new FileInputStream(file));
+				BufferedOutputStream outs = new BufferedOutputStream(res.getOutputStream());
+				int read = 0;
+				while((read = fin.read(b)) != -1) {
+					outs.write(b, 0, read);
+				}
+				outs.close();
+				fin.close();
+			}
+		} catch(Exception e) {
+			System.out.println("download Error : " + e.getMessage());
+		}
+	}
+	
+	// 파일 삭제
+	public void deleteBoard(int num) {
+		String sql = null;
+		
+		try {
+			conn = pool.getConnection();
+			sql = "SELECT filename FROM board WHERE num = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeQuery();
+			
+			if(rs.next() && rs.getString(1) == null) {
+				File file = new File(SAVEFOLDER + "/" + rs.getString(1));
+				if (file.exists())
+					UtilMgr.delete(SAVEFOLDER + "/" + rs.getString(1));
+			}
+			sql = "DELETE FROM board WHERE num = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("deleteBoard Error : " + e.getMessage());
+		} finally {
+			pool.freeConnection(conn, pstmt);
+		}
 	}
 }
 

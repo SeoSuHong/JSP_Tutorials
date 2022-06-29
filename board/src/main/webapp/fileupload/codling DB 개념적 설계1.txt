@@ -1,0 +1,111 @@
+0. position
+    - no(pk)
+    - name
+
+1. 개인회원
+    - id(pk)
+    - position_no(fk)
+    - password(nn)
+    - name(nn)
+    - address(nn)
+    - email(nn)
+    - phoneNum(nn)
+    - resume_title
+
+2. 기업회원
+    - id(pk)
+    - position_no(fk)
+    - password(nn)
+    - 기업명(nn)
+    - 대표자명(nn)
+    - 사업자등록번호(nn)
+    - address(nn)
+    - 회사전화번호
+    - 담당자명(nn)
+    - 담당자num(nn)
+
+3. 관리자(보류)
+
+4-1. 학력정보
+    - no(pk)
+    - 개인회원id(fk)
+    - 최종학력
+    - 학교명
+    - 졸업일자
+    - 학과명
+    - 학점
+    
+4-2. 경력사항
+    - no(pk, fk)
+    - 개인회원id(fk)
+    - 회사명
+    - 재직기간
+    - 직급/직책
+    - 근무부서
+    - 기술스택
+
+4-2-1. 프로젝트
+    - no(pk)
+    - 개인회원id(fk)
+    - 프로젝트명
+    - 수행기간
+    - 상세내용
+
+4-3. carrer
+    - no(pk)
+    - 개인회원id(fk)
+    - name
+    - 기관
+    - 합격구분
+    - 취득일
+
+4-4. 자기소개서
+    - no(pk)
+    - 개인회원id(fk)
+    - title
+    - content
+
+5. 공고
+    - no(pk)
+    - 기업id(fk)
+    - title(nn)
+    - 필수사항
+    - 우대사항
+    - 경력사항
+    - 학력사항
+    - 고용형태
+    - 급여
+    - 지역
+    - 시간
+    - 직책
+    - date
+    - viewCnt
+
+6. 지원 (개인 ↔ 공고)
+    - no(pk)
+    - 지원자id(fk)
+    - 지원공고no(fk)
+
+7. 커뮤니티
+    - no(pk)
+    - menu
+
+7-1. 개인게시글
+    - no(pk)
+    - 개인id(fk)
+    - title
+    - content
+    - date
+    - password
+    - ip
+    - count
+
+7-2. 기업게시글
+    - no(pk)
+    - 기업id(fk)
+    - title
+    - content
+    - date
+    - password
+    - ip
+    - count
