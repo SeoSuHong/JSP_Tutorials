@@ -245,9 +245,9 @@ public class BoardMgr {
 			sql = "SELECT filename FROM board WHERE num = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, num);
-			pstmt.executeQuery();
+			rs = pstmt.executeQuery();
 			
-			if(rs.next() && rs.getString(1) == null) {
+			if(rs.next() && rs.getString(1) != null) {
 				File file = new File(SAVEFOLDER + "/" + rs.getString(1));
 				if (file.exists())
 					UtilMgr.delete(SAVEFOLDER + "/" + rs.getString(1));

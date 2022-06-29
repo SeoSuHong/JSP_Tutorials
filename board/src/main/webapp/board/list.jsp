@@ -58,7 +58,7 @@
 %>
 <script type="text/javascript">
 	function check() {
-		if(document.searchFrm.keyWord.value =="") {
+		if(document.searchFrm.keyWord.value == "") {
 			alert("검색어를 입력하세요.");
 			document.searchFrm.keyWord.focus(); return;
 		}
